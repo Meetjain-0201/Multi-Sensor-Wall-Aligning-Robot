@@ -1,4 +1,4 @@
-# 🤖 Multi-Sensor Self-Aligning Docking Robot
+# 🤖 Multi-Sensor Wall-Aligning Robot
 
 ---
 
@@ -44,7 +44,7 @@ Combines ultrasonic ranging (HC-SR04) and 9-DOF IMU (BNO055) with dual PID contr
 
 ---
 
-## 🧠 Docking Algorithm  
+## 🧠 Aligning Algorithm  
 ### 1. 🕵️‍♂️ Wall Acquisition Phase  
 - Continuous rotation until IMU reports 3° < x-axis < 20°  
 - Differential steering (L: forward, R: backward @ 60 PWM)  
@@ -73,5 +73,5 @@ const double kd = 0.0;   // Derivative (disabled)
 
 // Operational Limits
 const int SAFE_RANGE_CM = 50;  // Max valid distance
-const int DOCK_SPEED = 50;     // Final approach PWM
+const int ALIGN_SPEED = 50;     // Final approach PWM
 const int SCAN_SPEED = 60;     // Search mode PWM
