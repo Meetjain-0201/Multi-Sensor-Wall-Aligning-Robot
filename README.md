@@ -3,7 +3,7 @@
 ---
 
 ## 🌐 Overview  
-Autonomous docking robot with four-stage precision alignment:  
+Autonomous wall aligning robot with four-stage precision alignment:  
 1. Wall detection via IMU orientation  
 2. PID-controlled perpendicular alignment  
 3. Two-point contact initiation  
