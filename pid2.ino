@@ -5,7 +5,7 @@
   
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
-//ultrasonics sensor
+//ultrasonics sensor 
 #define echoPinR 12
 #define trigPinR 3 
 #define echoPinL 4 
