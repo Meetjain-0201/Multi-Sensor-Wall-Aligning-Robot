@@ -1,69 +1,77 @@
-# Multi-Sensor Self-Aligning Docking Robot
+# 🤖 Multi-Sensor Self-Aligning Docking Robot
 
--------------------------------------
+---
 
-## ▮ OVERVIEW  
-A multi-sensor robot demonstrating autonomous docking capabilities::  
-1. Locate a charging station wall  
-2. Align itself perpendicular to the wall using PID control  
-3. Make two-point contact with the charging station  
-4. Shut down upon successful docking  
+## 🌐 Overview  
+Autonomous docking robot with four-stage precision alignment:  
+1. Wall detection via IMU orientation  
+2. PID-controlled perpendicular alignment  
+3. Two-point contact initiation  
+4. Automatic shutdown  
 
-The system combines ultrasonic sensors for distance measurement and a BNO055 IMU for orientation detection, with PID controllers for precise movement control.  
+Combines ultrasonic ranging (HC-SR04) and 9-DOF IMU (BNO055) with dual PID controllers for millimeter-precision docking.
 
--------------------------------------
+---
 
-## ▮ HARDWARE COMPONENTS  
-- **Microcontroller**: Arduino-compatible board  
-- **Sensors**:  
-  - 2x HC-SR04 Ultrasonic sensors (left and right)  
-  - Adafruit BNO055 9-DOF IMU  
-- **Motors**:  
-  - 2x DC motors with PWM speed control  
-  - Motor driver (L298N or similar)  
-- **Power**: Charging station with contact pins  
+## 🛠️ Hardware Components  
+- **Brain**: Arduino-compatible MCU  
+- **Senses**:  
+  - HC-SR04 Ultrasonic Pair (20-400cm range)  
+  - BNO055 IMU (±0.5° orientation accuracy)  
+- **Movement**:  
+  - 2x DC Motors (PWM controlled)  
+  - L298N Motor Driver  
+- **Power**: 🔋 Charging station with magnetic contacts  
 
--------------------------------------
+---
 
-## ▮ PIN CONFIGURATION  
-| COMPONENT               | ARDUINO PIN |  
-|-------------------------|-------------|  
-| Right Ultrasonic Echo   | 12          |  
-| Right Ultrasonic Trig   | 3           |  
-| Left Ultrasonic Echo    | 4           |  
-| Left Ultrasonic Trig    | 9           |  
-| Left Motor PWM          | 5           |  
-| Left Motor Direction    | 8           |  
-| Right Motor PWM         | 6           |  
-| Right Motor Direction   | 11          |  
-| Interrupt Pin           | 2           |  
-| BNO055 I2C             | SDA/SCL     |  
+## 🔌 Pinout  
+| Component               | Pin  | Type        |  
+|-------------------------|------|-------------|  
+| Right US Echo          | 12   | Input       |  
+| Right US Trig          | 3    | Output      |  
+| Left US Echo           | 4    | Input       |  
+| Left US Trig           | 9    | Output      |  
+| Motor L PWM            | 5    | PWM         |  
+| Motor L Dir            | 8    | Digital     |  
+| Motor R PWM            | 6    | PWM         |  
+| Motor R Dir            | 11   | Digital     |  
+| Dock Interrupt         | 2    | Digital*    |  
+| Contact Confirm        | 7    | Digital**   |  
 
--------------------------------------
+*Pull-up enabled  
+**Normally-open contact switch  
 
-## ▮ DOCKING ALGORITHM  
-1. **WALL FINDING STAGE**:  
-   - Robot rotates until IMU detects proper orientation (Q angle between 3-20°)  
-   - Uses differential wheel speeds for rotation  
+---
 
-2. **ALIGNMENT STAGE**:  
-   - Dual PID controllers maintain set distance (20cm) from wall  
-   - Independently adjusts left and right motors based on ultrasonic readings  
+## 🧠 Docking Algorithm  
+### 1. 🕵️‍♂️ Wall Acquisition Phase  
+- Continuous rotation until IMU reports 3° < x-axis < 20°  
+- Differential steering (L: forward, R: backward @ 60 PWM)  
 
-3. **CONTACT STAGE**:  
-   - Triggered by interrupt on pin 2  
-   - Moves forward at reduced speed (50 PWM)  
-   - Uses physical contact switch on pin 7 for final confirmation  
+### 2. 📐 Precision Alignment  
+- Dual PID controllers (one per side)  
+- Maintains 20cm standoff from wall  
+- Real-time ultrasonic feedback (4-50cm operational range)  
 
-4. **SHUTDOWN**:  
-   - Stops all motors  
-   - Enters low-power state  
+### 3. 🤝 Contact Sequence  
+- Triggered by IR/physical dock signal (Pin 2 LOW)  
+- Creep mode @ 50 PWM until Pin 7 confirms contact  
 
--------------------------------------
+### 4. 🛑 System Shutdown  
+- Motor kill command  
+- Safety lockout until manual reset  
 
-## ▮ PID TUNING PARAMETERS  
+---
+
+## 🎛️ Control Parameters  
 ```cpp
-double kp = 24;  // Proportional gain
-double ki = 0;   // Integral gain
-double kd = 0;   // Derivative gain
-int setPoint = 20; // Target distance in cm
+// PID Constants
+const double kp = 24.0;  // Proportional (dominant term)
+const double ki = 0.0;   // Integral (disabled)  
+const double kd = 0.0;   // Derivative (disabled)
+
+// Operational Limits
+const int SAFE_RANGE_CM = 50;  // Max valid distance
+const int DOCK_SPEED = 50;     // Final approach PWM
+const int SCAN_SPEED = 60;     // Search mode PWM
