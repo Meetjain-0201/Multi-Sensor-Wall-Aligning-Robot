@@ -1,9 +1,9 @@
-# AUTONOMOUS DOCKING ROBOT SYSTEM
+# Multi-Sensor Self-Aligning Docking Robot
 
 -------------------------------------
 
 ## ▮ OVERVIEW  
-This project implements an autonomous docking robot that can:  
+A multi-sensor robot demonstrating autonomous docking capabilities::  
 1. Locate a charging station wall  
 2. Align itself perpendicular to the wall using PID control  
 3. Make two-point contact with the charging station  
