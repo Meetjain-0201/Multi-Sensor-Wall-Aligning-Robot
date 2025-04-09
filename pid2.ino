@@ -68,7 +68,7 @@ void loop() {
   wall_finder();
 }
 
-//First stage of docking i.e. finding wall where charging station is
+//First stage of Aligning i.e. finding wall 
 void wall_finder(){ 
   
   double Q = angle();
@@ -94,7 +94,7 @@ void wall_finder(){
     delay(10);
   }
 }
-//Second stage of docking i.e aligning bot perpendicular to wall
+//Second stage of Aligning i.e aligning bot perpendicular to wall
 void PID() {
   double distanceL = distL ();
   double distanceR = distR ();
@@ -138,7 +138,7 @@ void PID() {
    Serial.print("  ");Serial.print("  ");Serial.print("output1 ");Serial.println(output1);
 }
 
-//3rd stage of docking ie.e bot moves forward to make 2 point contact
+//3rd stage of aligning ie.e bot moves forward to make 2 point contact
 void blink() {    
   analogWrite(pwmL, 50); 
   digitalWrite(dirL, HIGH);  
